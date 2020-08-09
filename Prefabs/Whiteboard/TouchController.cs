@@ -1,35 +1,25 @@
 ﻿using UnityEngine;
 
 
-public partial class PenController : MonoBehaviour
+public class TouchController : MonoBehaviour
 {
-    public GameObject Whiteboard;
-    private RaycastHit touch;
-    private Quaternion lastAngle;
-    private DrawOnRenderTexture canvas;
+    
     private ITouchResponse _touchResponse;
+    private ITouchDetection _touchDetection;
 
     private void Awake()
     {
         _touchResponse = GetComponent<ITouchResponse>();
+        _touchDetection = GetComponent<ITouchDetection>();
     }
 
     void Update()
     {
-        //create ray
-        float tipheight = transform.Find("tip").localScale.y / 2;
-        Transform _tip = transform.Find("tip");
-        Ray _ray = new Ray(_tip.position, _tip.up);
-
-        //check Collsion and tag
-        bool touched = Physics.Raycast(_ray, out touch, tipheight / 2);
-
-        if (touched)
+        if (_touchDetection.Touching())
         {
-            if (!(touch.collider.tag == "Whiteboard")) return;
+            TouchData data = _touchDetection.GetTouchData();
 
-            _touchResponse.OnTouchEnter(new Vector3(touch.textureCoord.x, touch.textureCoord.y,0), touch.collider.gameObject);
+            _touchResponse.OnTouchEnter(data.TouchPoint, data.TouchedObject);
         }
-
     }
 }

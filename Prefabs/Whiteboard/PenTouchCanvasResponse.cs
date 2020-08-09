@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-//interface touchrespons
-//need to know where it was touched, and what was touched.
-//OnTouchEnter
-//OnTouchExit
 
 
 public class PenTouchCanvasResponse : MonoBehaviour, ITouchResponse
